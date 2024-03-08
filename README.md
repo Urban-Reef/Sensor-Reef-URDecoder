@@ -64,6 +64,8 @@ switch (buffer.readUInt8(cursor++)) {
 ```
 `decoded.points[decoded.points.length -1].newDataType` selects the latest point in the `decoded` object and stores the decoded value under the attribute `newDataType`.
 
+**NOTE**: To decode the byte array you cannot use the `Buffer` module as js modules are blocked by TTN.
+
 ### Testing the new type
 1. Copy the `TYPE` object to `createTestBuffer.js`.
 2. At the bottom create a new function.

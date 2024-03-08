@@ -9,7 +9,7 @@ TYPES.RELATIVE_HUMIDITY = 4;
  * @param input The received payload.
  * @returns {object}  Decoded object to be transformed to JSON by TTN.
 * */
-export function decodeUplink(input) {
+function decodeUplink(input) {
     //The byte array consist of 8-bit unsigned integers.
     const byteArray = input.bytes;
     //Create object to store decoded information.
@@ -17,6 +17,7 @@ export function decodeUplink(input) {
         reefId: null,
         points: []
     };
+    let warnings = []
 
     //Cursor is used to track the position in the byte array.
     let cursor = 0;
@@ -53,9 +54,15 @@ export function decodeUplink(input) {
                 break;
             default:
                 // If type byte is not recognized or empty, do nothing.
+                if (byteArray[cursor - 1] !== 0) {
+                    warnings.push(`Unrecognised flag/type: ${byteArray[cursor - 1]} at position: ${cursor - 1}`);
+                }
                 break;
         }
     }
 
-    return decoded;
+    return {
+        data: decoded,
+        warnings: warnings
+    }
 }
